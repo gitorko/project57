@@ -1,0 +1,35 @@
+spring:
+  main:
+    banner-mode: "off"
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    host: localhost
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    hikari:
+      maximumPoolSize: 1
+      connectionTimeout: 1000
+      idleTimeout: 60
+      maxLifetime: 180
+  jpa:
+    show-sql: false
+    hibernate.ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+
+server:
+  port: 31000
+  tomcat:
+    connection-timeout: 10
+    threads:
+      max: 2
+    max-keep-alive-requests: 10
+    keep-alive-timeout: 10
+    max-connections: 5
+
+resilience4j.timelimiter:
+  instances:
+    service1-tl:
+      timeoutDuration: 1s
+      cancelRunningFuture: true
