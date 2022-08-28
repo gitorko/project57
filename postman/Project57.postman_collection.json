@@ -1,0 +1,173 @@
+{
+	"info": {
+		"_postman_id": "957fbac9-b135-43d5-a275-cf77ea93cb64",
+		"name": "Project57",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4185850"
+	},
+	"item": [
+		{
+			"name": "Get Time",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:31000/api/time",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "31000",
+					"path": [
+						"api",
+						"time"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Echo 1 - Waits forever",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:31000/api/echo1/jack",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "31000",
+					"path": [
+						"api",
+						"echo1",
+						"jack"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Echo 2 - Timeout after 1 sec",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:31000/api/echo2/jack",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "31000",
+					"path": [
+						"api",
+						"echo2",
+						"jack"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Echo 3 - External call timeout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:31000/api/echo3/jack",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "31000",
+					"path": [
+						"api",
+						"echo3",
+						"jack"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Count 1 - Slow Query No Timeout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:31000/api/count1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "31000",
+					"path": [
+						"api",
+						"count1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Count 2 - Slow Query Timeout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:31000/api/count2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "31000",
+					"path": [
+						"api",
+						"count2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DB Call - No Free Connection Pool",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:31000/api/many-db-call",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "31000",
+					"path": [
+						"api",
+						"many-db-call"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Memory Spike",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:31000/api/memory-leak",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "31000",
+					"path": [
+						"api",
+						"memory-leak"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
