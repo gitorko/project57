@@ -2,6 +2,7 @@
 
 Point of Failures in System
 
+[https://gitorko.github.io/points-of-failure/](https://gitorko.github.io/points-of-failure/)
 
 ### Version
 
