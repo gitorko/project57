@@ -27,6 +27,12 @@ server:
     max-keep-alive-requests: 10
     keep-alive-timeout: 10
     max-connections: 5
+  compression:
+    enabled: true
+    # Minimum response when compression will kick in
+    min-response-size: 512
+    # Mime types that should be compressed
+    mime-types: text/xml, text/plain, application/json
 
 resilience4j.timelimiter:
   instances:
