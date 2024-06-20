@@ -20,19 +20,19 @@ spring:
 
 server:
   port: 31000
-  tomcat:
-    connection-timeout: 10
-    threads:
-      max: 2
-    max-keep-alive-requests: 10
-    keep-alive-timeout: 10
-    max-connections: 5
   compression:
     enabled: true
     # Minimum response when compression will kick in
     min-response-size: 512
     # Mime types that should be compressed
     mime-types: text/xml, text/plain, application/json
+  tomcat:
+    connection-timeout: 10
+    threads:
+      max: 10
+    max-keep-alive-requests: 10
+    keep-alive-timeout: 10
+    max-connections: 5
 
 resilience4j.timelimiter:
   instances:
