@@ -21,6 +21,8 @@ spring:
     init:
       mode: always
 server:
+  http2:
+    enabled: false
   port: 8080
   compression:
     enabled: true
