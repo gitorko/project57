@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "957fbac9-b135-43d5-a275-cf77ea93cb64",
+		"_postman_id": "08adfbea-68d5-4755-9a13-a792c43fd14b",
 		"name": "Project57",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "4185850"
@@ -12,12 +12,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:31000/api/time",
+					"raw": "http://localhost:8080/api/time",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "31000",
+					"port": "8080",
 					"path": [
 						"api",
 						"time"
@@ -27,17 +27,17 @@
 			"response": []
 		},
 		{
-			"name": "Echo 1 - Waits forever",
+			"name": "Echo 1 - Waits for 1 Min",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:31000/api/echo1/jack",
+					"raw": "http://localhost:8080/api/echo1/jack",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "31000",
+					"port": "8080",
 					"path": [
 						"api",
 						"echo1",
@@ -53,12 +53,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:31000/api/echo2/jack",
+					"raw": "http://localhost:8080/api/echo2/jack",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "31000",
+					"port": "8080",
 					"path": [
 						"api",
 						"echo2",
@@ -74,12 +74,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:31000/api/echo3/jack",
+					"raw": "http://localhost:8080/api/echo3/jack",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "31000",
+					"port": "8080",
 					"path": [
 						"api",
 						"echo3",
@@ -90,60 +90,60 @@
 			"response": []
 		},
 		{
-			"name": "Get Count 1 - Slow Query No Timeout",
+			"name": "Async DB Call - No Free Connection Pool",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:31000/api/count1",
+					"raw": "http://localhost:8080/api/async-db-call",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "31000",
+					"port": "8080",
 					"path": [
 						"api",
-						"count1"
+						"async-db-call"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get Count 2 - Slow Query Timeout",
+			"name": "DB Call 1 - Slow Query No Timeout",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:31000/api/count2",
+					"raw": "http://localhost:8080/api/db-call-1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "31000",
+					"port": "8080",
 					"path": [
 						"api",
-						"count2"
+						"db-call-1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "DB Call - No Free Connection Pool",
+			"name": "DB Call 2 - Slow Query Timeout",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:31000/api/many-db-call",
+					"raw": "http://localhost:8080/api/db-call-2",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "31000",
+					"port": "8080",
 					"path": [
 						"api",
-						"many-db-call"
+						"db-call-2"
 					]
 				}
 			},
@@ -155,12 +155,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:31000/api/memory-leak",
+					"raw": "http://localhost:8080/api/memory-leak",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "31000",
+					"port": "8080",
 					"path": [
 						"api",
 						"memory-leak"

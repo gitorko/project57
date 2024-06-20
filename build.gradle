@@ -40,5 +40,6 @@ tasks.named('test') {
 }
 
 bootRun {
-    jvmArgs=['-Xms254m','-Xmx400m','-DPOSTGRES_DB=test-db','-DPOSTGRES_HOST=localhost','-DPOSTGRES_PASSWORD=test@123', '-DPOSTGRES_USER=test']
+    jvmArgs=['-Xms254m','-Xmx400m','-DPOSTGRES_DB=test-db','-DPOSTGRES_HOST=localhost',
+             '-DPOSTGRES_PASSWORD=test@123', '-DPOSTGRES_USER=test', '-DHOSTNAME=pod0']
 }

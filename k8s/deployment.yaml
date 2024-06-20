@@ -1,0 +1,137 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project57
+  labels:
+    app: project57
+spec:
+  selector:
+    matchLabels:
+      app: project57
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: project57
+    spec:
+      containers:
+        - name: project57
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          image: project57:1.0.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+            - containerPort: 8085
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "250Mi"
+            limits:
+              cpu: "2"
+              memory: "380Mi"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+  labels:
+    app: db-server
+data:
+  POSTGRES_DB: test-db
+  POSTGRES_USER: test
+  POSTGRES_PASSWORD: test@123
+  POSTGRES_HOST: db-server
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv-volume
+  labels:
+    type: local
+    app: db-server
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/tmp/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+  labels:
+    app: postgredb
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgredb
+spec:
+  selector:
+    matchLabels:
+      app: db-server
+  strategy:
+    type: Recreate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: db-server
+    spec:
+      containers:
+        - image: postgres:14
+          name: postgres
+          imagePullPolicy: "IfNotPresent"
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgredb
+              mountPath: /var/data
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-server
+  labels:
+    app: db-server
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+  selector:
+    app: db-server
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: project57
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http
+    - port: 8085
+      targetPort: 8085
+      name: jvm
+  selector:
+    app: project57
+  type: LoadBalancer

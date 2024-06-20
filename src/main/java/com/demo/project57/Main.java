@@ -35,7 +35,8 @@ public class Main {
     @Bean
     public CommandLineRunner seedData(CustomerRepository customerRepository) {
         return args -> {
-            for (int i = 0; i < 99; i++) {
+            customerRepository.deleteAll();
+            for (int i = 0; i < 10; i++) {
                 customerRepository.save(Customer.builder().name("customer_" + i).phone("phone_" + i).build());
             }
         };

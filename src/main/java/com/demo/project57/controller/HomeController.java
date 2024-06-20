@@ -1,5 +1,6 @@
 package com.demo.project57.controller;
 
+import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,11 @@ public class HomeController {
 
     List<String> names = new ArrayList<>();
 
+    @SneakyThrows
     @GetMapping("/api/time")
     public String getServerTime() {
         log.info("Getting server time!");
-        String podName = System.getenv("HOSTNAME");
+        String podName = InetAddress.getLocalHost().getHostName();
         return "Pod: " + podName + " : " + LocalDateTime.now();
     }
 
@@ -68,7 +70,8 @@ public class HomeController {
     @GetMapping("/api/echo3/{name}")
     public String echo3(@PathVariable String name) {
         log.info("echo3 received echo request: {}", name);
-        String response = restTemplate.exchange("http://localhost:31000/api/echo2/john", HttpMethod.GET, null, String.class)
+        String response = restTemplate.exchange("http://localhost:8080/api/echo1/john", HttpMethod.GET, null,
+                        String.class)
                 .getBody();
         log.info("Got response: {}", response);
         return response;
@@ -77,19 +80,19 @@ public class HomeController {
     /**
      * Over user of db connection by run-away method
      */
-    @GetMapping("/api/many-db-call")
-    public int manyDbCall() {
-        log.info("manyDbCall invoked!");
-        return customerService.invokeAyncDbCall();
+    @GetMapping("/api/async-db-call")
+    public void asyncDbCall() {
+        log.info("async-db-call invoked!");
+        customerService.invokeAsyncDbCall();
     }
 
     /**
      * Slow query without timeout
      * Explicit delay of 10 seconds introduced in DB query
      */
-    @GetMapping("/api/count1")
-    public int getCount1() {
-        log.info("dbCall invoked!");
+    @GetMapping("/api/db-call-1")
+    public int dbCall1() {
+        log.info("db-call-1 invoked!");
         return customerService.getCustomerCount1();
     }
 
@@ -97,9 +100,9 @@ public class HomeController {
      * Slow query with timeout
      * Explicit delay of 10 seconds introduced in DB query
      */
-    @GetMapping("/api/count2")
-    public int getCount2() {
-        log.info("dbCall invoked!");
+    @GetMapping("/api/db-call-2")
+    public int dbCall2() {
+        log.info("db-call-2 invoked!");
         return customerService.getCustomerCount2();
     }
 
@@ -121,7 +124,9 @@ public class HomeController {
         if (fixedDelay) {
             TimeUnit.MINUTES.sleep(1);
         } else {
-            //Randomly fixedDelay the job
+            /**
+             * Sometimes it will complete fast, sometimes it will take time
+             */
             Random rd = new Random();
             if (rd.nextBoolean()) {
                 TimeUnit.MINUTES.sleep(1);
