@@ -3,15 +3,27 @@ package com.demo.project57.controller;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import com.demo.project57.domain.Customer;
 import com.demo.project57.service.CustomerService;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +38,7 @@ public class HomeController {
 
     private final CustomerService customerService;
     private final RestClient restClient;
-
-    List<String> names = new ArrayList<>();
+    Map<MyKey, byte[]> customerMap = new HashMap<>();
 
     @SneakyThrows
     @GetMapping("/time")
@@ -62,7 +73,7 @@ public class HomeController {
      * The job will still run in the background, There is no way to kill a thread in java you can only interrupt.
      */
     @GetMapping("/job3/{delay}")
-    @TimeLimiter(name = "project57-tl")
+    @TimeLimiter(name = "project57-t1")
     public CompletableFuture<String> job3(@PathVariable Long delay) {
         log.info("job3 request received, delay: {}", delay);
         return CompletableFuture.supplyAsync(() -> {
@@ -114,16 +125,83 @@ public class HomeController {
     }
 
     /**
-     * Create spike in memory
-     * List keeps growing on each call and eventually causes OOM error
+     * Create memory leak and spike in heap memory
+     * Map keeps growing on each call and eventually causes OOM error
+     * If the key is unique the map should have fixed set of entries no matter how many times we invoke
+     * Key in hashmap has to be immutable
      */
     @GetMapping("/job8/{records}")
     public ResponseEntity job8(@PathVariable Long records) {
         log.info("job8 request received");
         for (int i = 0; i < records; i++) {
-            names.add("customer_" + i);
+            //By creating a non-immutable key it creates a memory leak
+            customerMap.put(new MyKey("customer_" + i), new byte[100000]);
         }
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Will allow GC to recover the space
+     */
+    @GetMapping("/job9/{records}")
+    public ResponseEntity job9(@PathVariable Long records) {
+        log.info("job9 request received");
+        List<Customer> customerList = new ArrayList<>();
+        for (int i = 0; i < records; i++) {
+            //By creating a non-immutable key it creates a memory leak
+            customerList.add(Customer.builder()
+                    .id(Long.valueOf(i))
+                    .name("customer_" + i)
+                    .city("city_" + i)
+                    .build());
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Bulk head
+     */
+    @GetMapping("/job10/{delay}")
+    @Bulkhead(name = "project57-b1")
+    public String job10(@PathVariable Long delay) {
+        log.info("job10 request received");
+        return customerService.longRunningJob(delay);
+    }
+
+    /**
+     * Rate limit
+     */
+    @GetMapping("/job11/{delay}")
+    @RateLimiter(name = "project57-r1")
+    public String job11(@PathVariable Long delay) {
+        log.info("job11 request received");
+        return customerService.longRunningJob(delay);
+    }
+
+    /**
+     * Secret Password generated using library Passay
+     */
+    @GetMapping("/job15/{delay}")
+    public String job15(@PathVariable Long delay) {
+        log.info("job15 request received");
+        List<CharacterRule> charList = Arrays.asList(
+                new CharacterRule(EnglishCharacterData.UpperCase, 2),
+                new CharacterRule(EnglishCharacterData.LowerCase, 2),
+                new CharacterRule(EnglishCharacterData.Digit, 2));
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+        String newPassword = passwordGenerator.generatePassword(15, charList);
+        log.info("Password generated, Wont be printed!");
+        var encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        String encodedPassword = encoder.encode(newPassword);
+        log.info("Encoded Password {}", encodedPassword);
+        customerService.longRunningJob(delay);
+        return encodedPassword;
+    }
+
+    @AllArgsConstructor
+    @Data
+    class MyKey {
+        String key;
     }
 
 }

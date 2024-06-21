@@ -38,8 +38,31 @@ server:
     keep-alive-timeout: 10
     max-connections: 5
 
-resilience4j.timelimiter:
-  instances:
-    project57-tl:
-      timeoutDuration: 5s
-      cancelRunningFuture: true
+resilience4j:
+  timelimiter:
+    instances:
+      project57-t1:
+        timeoutDuration: 5s
+        cancelRunningFuture: true
+  ratelimiter:
+    instances:
+      project57-r1:
+        limit-for-period: 5
+        limit-refresh-period: 1s
+        timeout-duration: 0s
+  bulkhead:
+    instances:
+      project57-b1:
+        max-concurrent-calls: 2
+        max-wait-duration: 10ms
+logging:
+  file:
+    name: project57-app.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: logs/%d{yyyy-MM, aux}/app.%d{yyyy-MM-dd}.%i.log
+      max-file-size: 100MB
+      total-size-cap: 10GB
+      max-history: 10
+  level:
+    root: info

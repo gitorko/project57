@@ -28,8 +28,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.micrometer:micrometer-tracing-bridge-brave'
     implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
+    implementation 'org.passay:passay:1.6.4'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
@@ -40,6 +42,19 @@ tasks.named('test') {
 }
 
 bootRun {
-    jvmArgs=['-Xms254m','-Xmx400m','-DPOSTGRES_DB=test-db','-DPOSTGRES_HOST=localhost',
-             '-DPOSTGRES_PASSWORD=test@123', '-DPOSTGRES_USER=test', '-DHOSTNAME=pod0']
+    jvmArgs = ['-server',
+               '-Xms250m',
+               '-Xmx500m',
+               '-XX:+UseG1GC',
+               '-XX:+HeapDumpOnOutOfMemoryError',
+               '-XX:MaxGCPauseMillis=200',
+               '-XX:ParallelGCThreads=20',
+               '-XX:ConcGCThreads=5',
+               '-XX:InitiatingHeapOccupancyPercent=70',
+               '-Xlog:gc*=info:file=project57-gc.log:time,uptime,level,tags:filecount=5,filesize=100m',
+               '-DPOSTGRES_DB=test-db',
+               '-DPOSTGRES_HOST=localhost',
+               '-DPOSTGRES_PASSWORD=test@123',
+               '-DPOSTGRES_USER=test',
+               '-DHOSTNAME=pod0']
 }

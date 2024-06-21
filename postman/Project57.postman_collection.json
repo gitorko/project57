@@ -116,7 +116,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job5/60",
+					"raw": "http://localhost:8080/api/job5/10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -125,7 +125,7 @@
 					"path": [
 						"api",
 						"job5",
-						"60"
+						"10"
 					]
 				}
 			},
@@ -174,12 +174,12 @@
 			"response": []
 		},
 		{
-			"name": "Job8 - Memory Spike",
+			"name": "Job8 - Memory Leak",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job8/999999",
+					"raw": "http://localhost:8080/api/job8/1000",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -188,7 +188,111 @@
 					"path": [
 						"api",
 						"job8",
+						"1000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Job9 - Garbage Collection",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/job11/999999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"job11",
 						"999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Job10 - Bulk Head",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/job10/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"job10",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Job11 - Rate Limiter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/job11/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"job11",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Job15 - Password Generator",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/job15/60",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"job15",
+						"60"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Health Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator",
+						"health"
 					]
 				}
 			},

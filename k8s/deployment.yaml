@@ -27,10 +27,10 @@ spec:
           resources:
             requests:
               cpu: "250m"
-              memory: "250Mi"
+              memory: "1Gi"
             limits:
               cpu: "2"
-              memory: "380Mi"
+              memory: "1Gi"
 ---
 apiVersion: v1
 kind: ConfigMap

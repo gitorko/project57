@@ -35,3 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
+/project57-app.log*
+/project57-gc.log*
