@@ -31,7 +31,7 @@ server:
     # Mime types that should be compressed
     mime-types: text/xml, text/plain, application/json
   tomcat:
-    connection-timeout: 20000
+    connection-timeout: 500
     threads:
       max: 10
     max-keep-alive-requests: 10
@@ -40,6 +40,6 @@ server:
 
 resilience4j.timelimiter:
   instances:
-    service1-tl:
-      timeoutDuration: 1s
+    project57-tl:
+      timeoutDuration: 5s
       cancelRunningFuture: true

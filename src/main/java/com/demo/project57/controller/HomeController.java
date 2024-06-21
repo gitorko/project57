@@ -4,35 +4,34 @@ import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 import com.demo.project57.service.CustomerService;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api")
 public class HomeController {
 
-    private final RestTemplate restTemplate;
     private final CustomerService customerService;
+    private final RestClient restClient;
 
     List<String> names = new ArrayList<>();
 
     @SneakyThrows
-    @GetMapping("/api/time")
-    public String getServerTime() {
+    @GetMapping("/time")
+    public String getTime() {
         log.info("Getting server time!");
         String podName = InetAddress.getLocalHost().getHostName();
         return "Pod: " + podName + " : " + LocalDateTime.now();
@@ -41,96 +40,90 @@ public class HomeController {
     /**
      * Will block the tomcat threads and hence no other requests can be processed
      */
-    @GetMapping("/api/echo1/{name}")
-    public String echo1(@PathVariable String name) {
-        log.info("echo1 received echo request: {}", name);
-        longRunningJob(true);
-        return "Hello " + name;
+    @GetMapping("/job1/{delay}")
+    public String job1(@PathVariable Long delay) {
+        log.info("job1 request received, delay: {}", delay);
+        return customerService.longRunningJob(delay);
     }
 
     /**
-     * Will time out after 1 second so other requests can be processed.
+     * Will not block the tomcat threads and hence no other requests can be processed
      */
-    @GetMapping("/api/echo2/{name}")
-    @TimeLimiter(name = "service1-tl")
-    public CompletableFuture<String> echo2(@PathVariable String name) {
+    @GetMapping("/job2/{delay}")
+    public CompletableFuture<String> job2(@PathVariable Long delay) {
+        log.info("job2 request received, delay: {}", delay);
         return CompletableFuture.supplyAsync(() -> {
-            log.info("echo2 received echo request: {}", name);
-            longRunningJob(false);
-            return "Hello " + name;
+            return customerService.longRunningJob(delay);
+        });
+    }
+
+    /**
+     * The @TimeLimiter will timeout if the job takes too long.
+     * The job will still run in the background, There is no way to kill a thread in java you can only interrupt.
+     */
+    @GetMapping("/job3/{delay}")
+    @TimeLimiter(name = "project57-tl")
+    public CompletableFuture<String> job3(@PathVariable Long delay) {
+        log.info("job3 request received, delay: {}", delay);
+        return CompletableFuture.supplyAsync(() -> {
+            return customerService.longRunningJob(delay);
         });
     }
 
     /**
      * API calling an external API that is not responding
-     * Since we don't have an external API we are using the echo1 api
-     *
-     * Here timeout on the rest template is configured
+     * Here timeout on the rest client is configured
      */
-    @GetMapping("/api/echo3/{name}")
-    public String echo3(@PathVariable String name) {
-        log.info("echo3 received echo request: {}", name);
-        String response = restTemplate.exchange("http://localhost:8080/api/echo1/john", HttpMethod.GET, null,
-                        String.class)
-                .getBody();
-        log.info("Got response: {}", response);
-        return response;
+    @GetMapping("/job4/{delay}")
+    public String job4(@PathVariable Long delay) {
+        log.info("job4 request received, delay: {}", delay);
+        String result = restClient.get()
+                .uri("/users/1?_delay=" + (delay * 1000))
+                .retrieve()
+                .body(String.class);
+        log.info("job4 response: {}", result);
+        return result;
     }
 
     /**
-     * Over user of db connection by run-away method
+     * Over user of db connection by run-away thread pool
      */
-    @GetMapping("/api/async-db-call")
-    public void asyncDbCall() {
-        log.info("async-db-call invoked!");
-        customerService.invokeAsyncDbCall();
+    @GetMapping("/job5/{threads}")
+    public void job5(@PathVariable int threads) {
+        log.info("job5 request received, threads: {}", threads);
+        customerService.invokeAsyncDbCall(threads, 1);
     }
 
     /**
      * Slow query without timeout
      * Explicit delay of 10 seconds introduced in DB query
      */
-    @GetMapping("/api/db-call-1")
-    public int dbCall1() {
-        log.info("db-call-1 invoked!");
-        return customerService.getCustomerCount1();
+    @GetMapping("/job6/{delay}")
+    public int job6(@PathVariable Long delay) {
+        log.info("job6 request received, delay: {}", delay);
+        return customerService.getCustomerCount1(delay);
     }
 
     /**
-     * Slow query with timeout
-     * Explicit delay of 10 seconds introduced in DB query
+     * Slow query with timeout of 5 seconds
      */
-    @GetMapping("/api/db-call-2")
-    public int dbCall2() {
-        log.info("db-call-2 invoked!");
-        return customerService.getCustomerCount2();
+    @GetMapping("/job7/{delay}")
+    public int job7(@PathVariable Long delay) {
+        log.info("job7 request received, delay: {}", delay);
+        return customerService.getCustomerCount2(delay);
     }
 
     /**
      * Create spike in memory
      * List keeps growing on each call and eventually causes OOM error
      */
-    @GetMapping("/api/memory-leak")
-    public ResponseEntity<?> memoryLeak() {
-        log.info("Inserting customers to memory");
-        for (int i = 0; i < 999999; i++) {
+    @GetMapping("/job8/{records}")
+    public ResponseEntity job8(@PathVariable Long records) {
+        log.info("job8 request received");
+        for (int i = 0; i < records; i++) {
             names.add("customer_" + i);
         }
-        return ResponseEntity.ok("DONE");
+        return ResponseEntity.ok().build();
     }
 
-    @SneakyThrows
-    private void longRunningJob(Boolean fixedDelay) {
-        if (fixedDelay) {
-            TimeUnit.MINUTES.sleep(1);
-        } else {
-            /**
-             * Sometimes it will complete fast, sometimes it will take time
-             */
-            Random rd = new Random();
-            if (rd.nextBoolean()) {
-                TimeUnit.MINUTES.sleep(1);
-            }
-        }
-    }
 }

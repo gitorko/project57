@@ -1,8 +1,8 @@
 # Project 57
 
-Point of Failures in System
+Distributed System Essentials
 
-[https://gitorko.github.io/points-of-failure/](https://gitorko.github.io/points-of-failure/)
+[https://gitorko.github.io/distributed-system-essentials/](https://gitorko.github.io/distributed-system-essentials/)
 
 ### Version
 

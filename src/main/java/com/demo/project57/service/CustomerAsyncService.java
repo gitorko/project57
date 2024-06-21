@@ -22,10 +22,10 @@ public class CustomerAsyncService {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Async
-    public void getCustomerCount() {
-        log.info("getCustomerLike invoked!");
-        int count = customerRepository.getCustomerCount();
-        log.info("getCustomerLike count: {}", count);
+    public void getCustomerCount(long delay) {
+        log.info("getCustomerCount invoked!");
+        int count = customerRepository.getCustomerCount(delay);
+        log.info("getCustomerCount completed: {}", count);
     }
 
 }
