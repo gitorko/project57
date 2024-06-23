@@ -276,6 +276,68 @@
 			"response": []
 		},
 		{
+			"name": "Circuit Breaker Job - Fail True",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/circuit-breaker-job/true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"circuit-breaker-job",
+						"true"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Circuit Breaker Job - Fail False",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/circuit-breaker-job/false",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"circuit-breaker-job",
+						"false"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Circuit Breaker Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator/circuitbreakers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator",
+						"circuitbreakers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Feature Flag Job",
 			"request": {
 				"method": "GET",
@@ -406,6 +468,25 @@
 			"response": []
 		},
 		{
+			"name": "Actuator",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get All Customer",
 			"request": {
 				"method": "GET",
@@ -446,12 +527,12 @@
 			"response": []
 		},
 		{
-			"name": "Get Customer Count - Delay",
+			"name": "Cache - Put",
 			"request": {
-				"method": "GET",
+				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/customer-count",
+					"raw": "http://localhost:8080/api/cache-put/FR/France",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -459,7 +540,30 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"customer-count"
+						"cache-put",
+						"FR",
+						"France"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cache - Get",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/cache-get/FR",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"cache-get",
+						"FR"
 					]
 				}
 			},

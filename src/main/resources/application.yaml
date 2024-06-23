@@ -51,17 +51,23 @@ resilience4j:
       project57-t1:
         timeoutDuration: 5s
         cancelRunningFuture: true
+    metrics:
+      enabled: true
   ratelimiter:
     instances:
       project57-r1:
         limit-for-period: 5
         limit-refresh-period: 1s
         timeout-duration: 0s
+    metrics:
+      enabled: true
   bulkhead:
     instances:
       project57-b1:
         max-concurrent-calls: 2
         max-wait-duration: 10ms
+    metrics:
+      enabled: true
   retry:
     instances:
       project57-y1:
@@ -73,6 +79,20 @@ resilience4j:
           - org.springframework.web.client.HttpClientErrorException
         ignoreExceptions:
           - org.springframework.web.client.HttpServerErrorException
+    metrics:
+      enabled: true
+  circuitbreaker:
+    instances:
+      project57-c1:
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        sliding-window-type: count_based
+    metrics:
+      enabled: true
 
 logging:
   include-application-name: false
@@ -107,7 +127,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: metrics, info, health, beans, env, refresh
+        include: '*'
 
 project57:
   newFeatureFlag: false

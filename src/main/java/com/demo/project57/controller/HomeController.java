@@ -1,6 +1,7 @@
 package com.demo.project57.controller;
 
 import java.net.InetAddress;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import com.demo.project57.config.CloudConfig;
 import com.demo.project57.domain.Customer;
 import com.demo.project57.service.CustomerService;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.AllArgsConstructor;
@@ -23,11 +25,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
@@ -41,9 +46,11 @@ public class HomeController {
     private final CustomerService customerService;
     private final RestClient restClient;
     private final CloudConfig cloudConfig;
+    private final CacheManager cacheManager;
 
     Map<MyKey, byte[]> customerMap = new HashMap<>();
     List<Customer> customerList;
+    Cache cache;
 
     @SneakyThrows
     @GetMapping("/time")
@@ -202,7 +209,23 @@ public class HomeController {
     }
 
     /**
+     * If this api keeps failing, after 50% failure rate the circuit will be closed
+     * It will then return 503 Service Unavailable
+     */
+    @GetMapping("/circuit-breaker-job/{fail}")
+    @CircuitBreaker(name = "project57-c1")
+    public String circuitBreakerJob(@PathVariable Boolean fail) {
+        log.info("circuitBreakerJob request received");
+        if (fail) {
+            throw new RuntimeException("Failed Job!");
+        } else {
+            return Instant.now().toString();
+        }
+    }
+
+    /**
      * Secret Password generated using library Passay
+     * Use salt and encode password before storing them.
      */
     @GetMapping("/password-gen-job/{delay}")
     public String passwordGenJob(@PathVariable Long delay) {
@@ -221,6 +244,10 @@ public class HomeController {
         return encodedPassword;
     }
 
+    /**
+     * Depending on the feature flag a different code will be executed.
+     * Feature flag can be updated/refreshed while server is running
+     */
     @GetMapping("/feature-job")
     public String featureJob() {
         log.info("featureJob request received");
@@ -229,6 +256,21 @@ public class HomeController {
         } else {
             return "Feature v1";
         }
+    }
+
+    @PutMapping("/cache-put/{key}/{value}")
+    public String cachePut(@PathVariable String key, @PathVariable String value) {
+        log.info("cachePut request received");
+        cache = cacheManager.getCache("countryCache");
+        cache.put(key, value);
+        return "done!";
+    }
+
+    @GetMapping("/cache-get/{key}")
+    public String cacheGet(@PathVariable String key) {
+        log.info("cacheGet request received");
+        cache = cacheManager.getCache("countryCache");
+        return String.valueOf(cache.get(key).get());
     }
 
     @AllArgsConstructor
