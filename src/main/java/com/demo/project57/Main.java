@@ -17,7 +17,7 @@ public class Main {
     public CommandLineRunner seedData(CustomerRepository customerRepository) {
         return args -> {
             customerRepository.deleteAll();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 100; i++) {
                 customerRepository.save(Customer.builder()
                         .name("customer_" + i)
                         .phone("phone_" + i)

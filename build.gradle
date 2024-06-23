@@ -29,6 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.cloud:spring-cloud-config-client:4.1.2'
     implementation 'io.micrometer:micrometer-tracing-bridge-brave'
     implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
     implementation 'org.passay:passay:1.6.4'

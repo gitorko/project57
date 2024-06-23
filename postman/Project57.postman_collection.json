@@ -27,12 +27,12 @@
 			"response": []
 		},
 		{
-			"name": "Job1 - Waits for 1 Min",
+			"name": "Blocking Job - Waits for 60 secs",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job1/60",
+					"raw": "http://localhost:8080/api/blocking-job/60",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -40,7 +40,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job1",
+						"blocking-job",
 						"60"
 					]
 				}
@@ -48,12 +48,12 @@
 			"response": []
 		},
 		{
-			"name": "Job2 - Waits for 1 Min Async",
+			"name": "Async Job - Waits for 60 secs Async",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job2/60",
+					"raw": "http://localhost:8080/api/async-job/60",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -61,7 +61,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job2",
+						"async-job",
 						"60"
 					]
 				}
@@ -69,12 +69,12 @@
 			"response": []
 		},
 		{
-			"name": "Job3 - Timeout after 5 sec",
+			"name": "Timeout Job - Timeout after 5 sec",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job3/10",
+					"raw": "http://localhost:8080/api/timeout-job/10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -82,7 +82,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job3",
+						"timeout-job",
 						"10"
 					]
 				}
@@ -90,12 +90,12 @@
 			"response": []
 		},
 		{
-			"name": "Job4 - External call timeout after 5 secs",
+			"name": "External Api Job - Timeout after 5 secs",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job4/10",
+					"raw": "http://localhost:8080/api/external-api-job/10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -103,7 +103,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job4",
+						"external-api-job",
 						"10"
 					]
 				}
@@ -111,12 +111,12 @@
 			"response": []
 		},
 		{
-			"name": "Job5 - No Free Connection Pool",
+			"name": "Async Db Job - No Free Connection Pool",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job5/10",
+					"raw": "http://localhost:8080/api/async-db-job/10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -124,7 +124,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job5",
+						"async-db-job",
 						"10"
 					]
 				}
@@ -132,12 +132,12 @@
 			"response": []
 		},
 		{
-			"name": "Job6 - Slow Query No Timeout",
+			"name": "Long Running Query Job - No Timeout",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job6/60",
+					"raw": "http://localhost:8080/api/db-long-query-job/20",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -145,20 +145,20 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job6",
-						"60"
+						"db-long-query-job",
+						"20"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Job7 - Slow Query Timeout",
+			"name": "Long Running Query  Job - Timeout",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job7/60",
+					"raw": "http://localhost:8080/api/db-long-query-timeout-job/20",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -166,20 +166,20 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job7",
-						"60"
+						"db-long-query-timeout-job",
+						"20"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Job8 - Memory Leak",
+			"name": "Memory Leak Job",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job8/1000",
+					"raw": "http://localhost:8080/api/memory-leak-job/999",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -187,20 +187,20 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job8",
-						"1000"
+						"memory-leak-job",
+						"999"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Job9 - Garbage Collection",
+			"name": "Load Heap Job",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job11/999999",
+					"raw": "http://localhost:8080/api/load-heap-job/999999",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -208,7 +208,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job11",
+						"load-heap-job",
 						"999999"
 					]
 				}
@@ -216,12 +216,12 @@
 			"response": []
 		},
 		{
-			"name": "Job10 - Bulk Head",
+			"name": "Bulk Head Job",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job10/10",
+					"raw": "http://localhost:8080/api/bulk-head-job",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -229,20 +229,19 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job10",
-						"10"
+						"bulk-head-job"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Job11 - Rate Limiter",
+			"name": "Rate Limiter Job",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job11/1",
+					"raw": "http://localhost:8080/api/rate-limit-job",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -250,20 +249,19 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job11",
-						"1"
+						"rate-limit-job"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Job15 - Password Generator",
+			"name": "Retry Job",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/job15/60",
+					"raw": "http://localhost:8080/api/retry-job",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -271,7 +269,116 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"job15",
+						"retry-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Feature Flag Job",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/feature-job",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"feature-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Feature Flag",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"project57.newFeatureFlag\",\n    \"value\": \"true\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/actuator/env",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator",
+						"env"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actuator Env",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator/env",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator",
+						"env"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actuator Refresh",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator/refresh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Password Generator Job",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/password-gen-job/60",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"password-gen-job",
 						"60"
 					]
 				}
@@ -293,6 +400,66 @@
 					"path": [
 						"actuator",
 						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Customer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Customer By Page",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/customer-page",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer-page"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customer Count - Delay",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/customer-count",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customer-count"
 					]
 				}
 			},

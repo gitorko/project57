@@ -1,6 +1,7 @@
 spring:
   main:
     banner-mode: "off"
+    lazy-initialization: false
   datasource:
     driver-class-name: org.postgresql.Driver
     host: localhost
@@ -20,6 +21,12 @@ spring:
   sql:
     init:
       mode: always
+  threads:
+    virtual:
+      enabled: false
+  cloud:
+    config:
+      enabled: false
 server:
   http2:
     enabled: false
@@ -34,9 +41,9 @@ server:
     connection-timeout: 500
     threads:
       max: 10
+    max-connections: 10
     max-keep-alive-requests: 10
     keep-alive-timeout: 10
-    max-connections: 5
 
 resilience4j:
   timelimiter:
@@ -55,7 +62,20 @@ resilience4j:
       project57-b1:
         max-concurrent-calls: 2
         max-wait-duration: 10ms
+  retry:
+    instances:
+      project57-y1:
+        max-attempts: 3
+        waitDuration: 10s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+        retryExceptions:
+          - org.springframework.web.client.HttpClientErrorException
+        ignoreExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+
 logging:
+  include-application-name: false
   file:
     name: project57-app.log
   logback:
@@ -66,3 +86,28 @@ logging:
       max-history: 10
   level:
     root: info
+
+management:
+  endpoint:
+    refresh:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+      show-components: always
+    metrics:
+      enabled: true
+    info:
+      env:
+        enabled: true
+      enabled: true
+    env:
+      post:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: metrics, info, health, beans, env, refresh
+
+project57:
+  newFeatureFlag: false

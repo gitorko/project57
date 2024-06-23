@@ -1,11 +1,11 @@
 package com.demo.project57.repository;
 
 import com.demo.project57.domain.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface CustomerRepository extends CrudRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
     /**
      * Simulating a slow query by sleeping for 10 sec
      */
