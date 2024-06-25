@@ -9,8 +9,7 @@ ENV _JAVA_OPTIONS '-Xms250m \
     -XX:MaxGCPauseMillis=200 \
     -XX:ParallelGCThreads=20 \
     -XX:ConcGCThreads=5 \
-    -XX:InitiatingHeapOccupancyPercent=70 \
-    -Xlog:gc*=info:file=project57-gc.log:time,uptime,level,tags:filecount=5,filesize=100m'
+    -XX:InitiatingHeapOccupancyPercent=70'
 
 CMD [ "java", \
     "-Dcom.sun.management.jmxremote=true", \

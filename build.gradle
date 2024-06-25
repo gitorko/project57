@@ -54,7 +54,6 @@ bootRun {
                '-XX:ParallelGCThreads=20',
                '-XX:ConcGCThreads=5',
                '-XX:InitiatingHeapOccupancyPercent=70',
-               '-Xlog:gc*=info:file=project57-gc.log:time,uptime,level,tags:filecount=5,filesize=100m',
                '-DPOSTGRES_DB=test-db',
                '-DPOSTGRES_HOST=localhost',
                '-DPOSTGRES_PASSWORD=test@123',

@@ -1,3 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: manual
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,7 +25,7 @@ spec:
         - name: project57
           envFrom:
             - configMapRef:
-                name: postgres-config
+                name: db-config
           image: project57:1.0.0
           imagePullPolicy: Never
           ports:
@@ -31,6 +38,13 @@ spec:
             limits:
               cpu: "2"
               memory: "1Gi"
+          volumeMounts:
+            - name: logs
+              mountPath: /var/app/logs
+      volumes:
+        - name: logs
+          persistentVolumeClaim:
+            claimName: log-pv-claim
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -47,7 +61,7 @@ data:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: postgres-pv-volume
+  name: db-pv
   labels:
     type: local
     app: db-server
@@ -59,13 +73,45 @@ spec:
     - ReadWriteMany
   hostPath:
     path: "/tmp/data"
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: log-pv
+  labels:
+    type: local
+    app: project57
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/tmp/logs"
+    type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-pv-claim
+  name: db-pv-claim
   labels:
-    app: postgredb
+    app: db-server
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: log-pv-claim
+  labels:
+    app: project57
 spec:
   storageClassName: manual
   accessModes:
@@ -77,7 +123,9 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgredb
+  name: db-server
+  labels:
+    app: db-server
 spec:
   selector:
     matchLabels:
@@ -93,19 +141,19 @@ spec:
       containers:
         - image: postgres:14
           name: postgres
-          imagePullPolicy: "IfNotPresent"
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
-                name: postgres-config
+                name: db-config
           ports:
             - containerPort: 5432
           volumeMounts:
-            - name: postgredb
+            - name: db-data
               mountPath: /var/data
       volumes:
-        - name: postgredb
+        - name: db-data
           persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            claimName: db-pv-claim
 ---
 apiVersion: v1
 kind: Service
@@ -120,10 +168,12 @@ spec:
   selector:
     app: db-server
 ---
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: project57
+  labels:
+    app: project57
 spec:
   ports:
     - port: 8080
