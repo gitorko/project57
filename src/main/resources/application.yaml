@@ -30,6 +30,13 @@ spring:
   cloud:
     config:
       enabled: false
+  task:
+    execution:
+      simple:
+        concurrency-limit: 10
+    scheduling:
+      simple:
+        concurrency-limit: 10
 server:
   http2:
     enabled: false
