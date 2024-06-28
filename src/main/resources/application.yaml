@@ -37,6 +37,9 @@ spring:
     scheduling:
       simple:
         concurrency-limit: 10
+  mvc:
+    async:
+      request-timeout: 5000
 server:
   http2:
     enabled: false
@@ -50,10 +53,12 @@ server:
   tomcat:
     connection-timeout: 500
     threads:
-      max: 10
-    max-connections: 10
+      max: 10 # Maximum amount of worker threads.
+      min-spare: 10 # Minimum amount of worker threads.
+    max-connections: 10 # Maximum number of connections that the server accepts and processes.
     max-keep-alive-requests: 10
     keep-alive-timeout: 10
+    accept-count: 100 # Maximum queue size for incoming connection requests
   error:
     include-binding-errors: always
     include-exception: false

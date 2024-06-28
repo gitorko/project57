@@ -63,24 +63,6 @@ public class HomeController {
         return "Pod: " + podName + " : " + LocalDateTime.now();
     }
 
-    @GetMapping("/customer")
-    public Iterable<Customer> findAllCustomer() {
-        log.info("Finding All Customers!");
-        return customerService.findAllCustomer();
-    }
-
-    @PostMapping("/customer")
-    public Customer saveCustomer(@RequestBody @Valid Customer customer) {
-        log.info("Saving Customer!");
-        return customerService.saveCustomer(customer);
-    }
-
-    @GetMapping("/customer-page")
-    public Iterable<Customer> findAllCustomerByPage(Pageable pageable) {
-        log.info("Finding All Customers By Page!");
-        return customerService.findAllCustomerByPage(pageable);
-    }
-
     /**
      * Will block the tomcat threads and hence no other requests can be processed
      */
@@ -265,6 +247,24 @@ public class HomeController {
         } else {
             return "Feature v1";
         }
+    }
+
+    @GetMapping("/customer")
+    public Iterable<Customer> findAllCustomer() {
+        log.info("Finding All Customers!");
+        return customerService.findAllCustomer();
+    }
+
+    @PostMapping("/customer")
+    public Customer saveCustomer(@RequestBody @Valid Customer customer) {
+        log.info("Saving Customer!");
+        return customerService.saveCustomer(customer);
+    }
+
+    @GetMapping("/customer-page")
+    public Iterable<Customer> findAllCustomerByPage(Pageable pageable) {
+        log.info("Finding All Customers By Page!");
+        return customerService.findAllCustomerByPage(pageable);
     }
 
     @PutMapping("/cache-put/{key}/{value}")
