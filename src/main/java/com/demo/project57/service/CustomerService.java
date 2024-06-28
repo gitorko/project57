@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.demo.project57.domain.Customer;
+import com.demo.project57.exception.CustomerException;
 import com.demo.project57.repository.CustomerRepository;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
@@ -78,4 +79,10 @@ public class CustomerService {
         }
     }
 
+    public Customer saveCustomer(Customer customer) {
+        if (customer.getCity().equals("unknown")) {
+            throw new CustomerException("Unknown city for customer!");
+        }
+        return customerRepository.save(customer);
+    }
 }

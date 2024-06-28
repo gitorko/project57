@@ -54,6 +54,12 @@ server:
     max-connections: 10
     max-keep-alive-requests: 10
     keep-alive-timeout: 10
+  error:
+    include-binding-errors: always
+    include-exception: false
+    include-message: always
+    include-path: always
+    include-stacktrace: never
 
 resilience4j:
   timelimiter:
