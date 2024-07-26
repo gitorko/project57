@@ -73,3 +73,9 @@ To build a small docker image
 docker build -f k8s/Dockerfile-Small --force-rm -t project57:1.0.0 . 
 docker run -d -p 8080:8080 -e POSTGRES_HOST="10.177.140.150" -e POSTGRES_DB="test-db" -e POSTGRES_USER="test" -e POSTGRES_PASSWORD="test@123" project57:1.0.0
 ```
+
+### Swagger
+
+[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+[http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)

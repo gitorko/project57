@@ -17,6 +17,11 @@ import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -288,10 +293,32 @@ public class HomeController {
         throw new RuntimeException("My Custom Error");
     }
 
+    @Operation(summary = "Greet Controller")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found User", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Greet.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid User Provided", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User Not Found", content = @Content)})
+    @GetMapping("/greet/{name}")
+    public ResponseEntity<Greet> greet(@PathVariable String name) {
+        if (name == null || name.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (name.equalsIgnoreCase("unknown")) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(new Greet("Hello " + name));
+    }
+
     @AllArgsConstructor
     @Data
     class MyKey {
         String key;
+    }
+
+    @AllArgsConstructor
+    @Data
+    class Greet {
+        String message;
     }
 
 }
