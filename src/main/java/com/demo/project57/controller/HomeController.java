@@ -309,6 +309,12 @@ public class HomeController {
         return ResponseEntity.ok(new Greet("Hello " + name));
     }
 
+    @GetMapping("/fetch/{city}")
+    public List<Customer> getByCity(@PathVariable String city) {
+        log.info("Fetching by city request received");
+        return customerService.getByCity(city);
+    }
+
     @AllArgsConstructor
     @Data
     class MyKey {

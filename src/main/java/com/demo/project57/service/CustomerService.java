@@ -1,6 +1,7 @@
 package com.demo.project57.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -84,5 +85,9 @@ public class CustomerService {
             throw new CustomerException("Unknown city for customer!");
         }
         return customerRepository.save(customer);
+    }
+
+    public List<Customer> getByCity(String city) {
+        return customerRepository.getByCity(city);
     }
 }

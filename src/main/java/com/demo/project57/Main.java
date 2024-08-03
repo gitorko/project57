@@ -1,29 +1,22 @@
 package com.demo.project57;
 
-import com.demo.project57.domain.Customer;
-import com.demo.project57.repository.CustomerRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
+@Slf4j
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
 
     @Bean
-    public CommandLineRunner seedData(CustomerRepository customerRepository) {
+    public CommandLineRunner onStart() {
         return args -> {
-            customerRepository.deleteAll();
-            for (int i = 0; i < 100; i++) {
-                customerRepository.save(Customer.builder()
-                        .name("customer_" + i)
-                        .phone("phone_" + i)
-                        .city("city_" + i)
-                        .build());
-            }
+            log.info("On Start!");
         };
     }
 }

@@ -6,3 +6,4 @@ create table if not exists public.customer
     name  varchar(255),
     phone varchar(255)
 );
+CREATE INDEX idx_customer_city ON public.customer (city);

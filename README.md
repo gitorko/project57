@@ -27,6 +27,19 @@ docker stop pg-container
 docker start pg-container
 ```
 
+To run postgres with `pg_hint_plan`
+
+```bash
+docker build --no-cache -t my-postgres-image -f docker/Dockerfile .
+docker run -p 5432:5432 --name my-postgres-container -e POSTGRES_PASSWORD=mysecretpassword -d my-postgres-image
+docker exec -it my-postgres-container psql -U postgres -W postgres
+CREATE USER test WITH PASSWORD 'test@123';
+CREATE DATABASE "test-db" WITH OWNER "test" ENCODING UTF8 TEMPLATE template0;
+grant all PRIVILEGES ON DATABASE "test-db" to test;
+
+CREATE EXTENSION pg_hint_plan;
+```
+
 ### Dev
 
 To run the backend in dev mode.
